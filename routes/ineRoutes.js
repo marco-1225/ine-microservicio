@@ -25,12 +25,21 @@ router.post('/guardar', (req, res) => {
 
 // GET
 router.get('/personas', (req, res) => {
-  db.query('SELECT * FROM persona', (err, results) => {
+  const sql = `
+    SELECT 
+      persona.id AS id_persona, persona.nombre, persona.apellido_paterno, persona.apellido_materno, persona.sexo, persona.curp,
+      domicilio.calle, domicilio.colonia, domicilio.municipio, domicilio.estado, domicilio.cp,
+      ine.clave_elector, ine.anio_registro, ine.seccion
+    FROM persona
+    JOIN domicilio ON domicilio.id = persona.id
+    JOIN ine ON ine.id = persona.id
+  `;
+
+  db.query(sql, (err, results) => {
     if (err) return res.status(500).json({ error: err.message });
     res.json(results);
   });
 });
-
 router.get('/domicilios', (req, res) => {
   db.query('SELECT * FROM domicilio', (err, results) => {
     if (err) return res.status(500).json({ error: err.message });
