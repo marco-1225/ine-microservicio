@@ -1,22 +1,20 @@
-const mysql = require('mysql2');
+const mysql = require('mysql');
 require('dotenv').config();
 
 const connection = mysql.createConnection({
-  host: process.env.MYSQLHOST || process.env.DB_HOST,
-  user: process.env.MYSQLUSER || process.env.DB_USER,
-  password: process.env.MYSQLPASSWORD || process.env.DB_PASSWORD,
-  database: process.env.MYSQLDATABASE || process.env.DB_NAME,
-  port: process.env.MYSQLPORT || 3306
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT, // ⚠️ Este es importante ahora
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME
 });
 
 connection.connect((err) => {
   if (err) {
     console.error('❌ Error al conectar a la base de datos:', err.message);
-  } else {
-    console.log('✅ Conectado a la base de datos MySQL en Railway');
+    return;
   }
+  console.log('✅ Conectado a la base de datos MySQL en Railway');
 });
-
-// NO poner connection.end()
 
 module.exports = connection;
