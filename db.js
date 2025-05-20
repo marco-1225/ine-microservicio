@@ -1,8 +1,4 @@
-‎db.js
-+10
--2
-Lines changed: 10 additions & 2 deletions
-Original file line number	Diff line number	Diff line change
+
 @@ -1,14 +1,22 @@
 const mysql = require('mysql2');
 require('dotenv').config();
