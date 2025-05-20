@@ -79,6 +79,7 @@ router.delete('/persona/:id', (req, res) => {
     res.json({ mensaje: 'Persona eliminada' });
   });
 });
+
 // GET persona por ID
 router.get('/persona/:id', (req, res) => {
   const { id } = req.params;
@@ -86,6 +87,24 @@ router.get('/persona/:id', (req, res) => {
     if (err) return res.status(500).json({ error: err.message });
     if (results.length === 0) return res.status(404).json({ mensaje: 'Persona no encontrada' });
     res.json(results[0]);
+  });
+});
+
+// GET personas con datos completos desde las 3 tablas
+router.get('/personas/completo', (req, res) => {
+  const sql = `
+    SELECT 
+      persona.id AS id_persona, persona.nombre, persona.apellido_paterno, persona.apellido_materno, persona.sexo, persona.curp,
+      domicilio.calle, domicilio.colonia, domicilio.municipio, domicilio.estado, domicilio.cp,
+      ine.clave_elector, ine.anio_registro, ine.seccion
+    FROM persona
+    JOIN domicilio ON domicilio.id = persona.id
+    JOIN ine ON ine.id = persona.id
+  `;
+
+  db.query(sql, (err, results) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json(results);
   });
 });
 
